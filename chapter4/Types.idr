@@ -84,6 +84,7 @@ insert x orig@(Node left val right) = case compare x val of
                                       EQ => orig
                                       GT => Node left val (insert x right)
 
+-- and it worked on the first try without any type errors lets goooo
 listToTree : Ord elem => List elem -> BSTree elem
 listToTree xs = listToTreeInner xs Empty
   where
