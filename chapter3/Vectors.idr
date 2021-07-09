@@ -52,3 +52,12 @@ my_map f (x :: xs) = (f x) :: my_map f xs
 my_vect_map : (a -> b) -> Vect n a -> Vect n b
 my_vect_map _ [] = []
 my_vect_map f (x :: xs) = (f x) :: my_vect_map f xs
+
+
+lengthLong : Vect n elem -> Nat
+lengthLong [] = 0
+lengthLong (x :: xs) = S (lengthLong xs)
+
+
+lengthLong2 : Vect n elem -> Nat
+lengthLong2 {n} xs = n
