@@ -13,3 +13,33 @@ invert False = True
 describeList : Show a => List a -> String
 describeList [] = "Empty"
 describeList (x :: xs) = "Non-empty (" ++ show x ++ "), tail = " ++ show xs
+
+showList : Show a => List a -> String
+showList [] = "[]"
+showList (x :: xs) = "[" ++ show x ++ showListInner xs
+  where
+    showListInner : Show a => List a -> String
+    showListInner [] = "]"
+    showListInner (x :: xs) = ", " ++ show x ++ showListInner xs
+
+allLengthsNoMap : List String -> List Nat
+allLengthsNoMap [] = []
+allLengthsNoMap (word :: words) = length word :: allLengthsNoMap words
+
+xor : Bool -> Bool -> Bool
+xor False y = y
+xor True y = not y
+
+isEven2 : Nat -> Bool
+isEven2 Z = True
+isEven2 (S k) = not (isEven2 k)
+
+mutual
+  isEven : Nat -> Bool
+  isEven Z = True
+  isEven (S k) = isOdd k
+  isOdd : Nat -> Bool
+  isOdd Z = False
+  isOdd (S k) = isEven k
+
+  
