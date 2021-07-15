@@ -21,6 +21,7 @@ addToStore (MkData size items) newitem = MkData _ (addToData items)
 
 data Command = Add String
              | Get Integer
+             | Size
              | Quit
 
 parseCommand : (cmd : String) -> (args : String) -> Maybe Command
@@ -29,6 +30,7 @@ parseCommand "get" val = case all isDigit (unpack val) of
                                True => Just (Get (cast val))
                                False => Nothing
 parseCommand "quit" args = Just Quit
+parseCommand "size" args = Just Size
 parseCommand _ _ = Nothing
 
 parse : (input : String) -> Maybe Command
@@ -46,10 +48,11 @@ getEntry pos store = let store_items = items store in
 processInput : DataStore -> String -> Maybe (String, DataStore)
 processInput store inp = case parse inp of
                               Nothing => Just ("invalid command\n", store)
-                              (Just (Add item)) =>
+                              Just (Add item) =>
                                   Just ("ID " ++ show (size store) ++ "\n", addToStore store item)
-                              (Just (Get pos)) => getEntry pos store
-                              (Just Quit) => Nothing
+                              Just (Get pos) => getEntry pos store
+                              Just Size => Just ("Size: " ++ show (size store) ++ "\n", store)
+                              Just Quit => Nothing
 
 
 main : IO ()
