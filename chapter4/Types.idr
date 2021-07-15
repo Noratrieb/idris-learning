@@ -91,3 +91,26 @@ listToTree xs = listToTreeInner xs Empty
     listToTreeInner : List elem -> BSTree elem -> BSTree elem
     listToTreeInner [] tree = tree
     listToTreeInner (x :: xs) tree = insert x (listToTreeInner xs tree)
+
+
+treeToList : BSTree elem -> List elem
+treeToList Empty = []
+treeToList (Node left val right) = treeToList left ++ val :: treeToList right
+
+
+-- expression
+data Expr = Val Int
+          | Add Expr Expr
+          | Sub Expr Expr
+          | Mult Expr Expr
+
+evaluate : Expr -> Int
+evaluate (Val x) = x
+evaluate (Add x y) = (evaluate x) + (evaluate y)
+evaluate (Sub x y) = (evaluate x) - (evaluate y)
+evaluate (Mult x y) = (evaluate x) * (evaluate y)
+
+maxMaybe : Ord a => Maybe a -> Maybe a -> Maybe a
+maxMaybe Nothing y = y
+maxMaybe x Nothing = x
+maxMaybe a@(Just x) b@(Just y) = if x > y then a else b
