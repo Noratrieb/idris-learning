@@ -42,4 +42,13 @@ mutual
   isOdd Z = False
   isOdd (S k) = isEven k
 
-  
+
+
+
+displayList : Show a => List a -> String
+displayList xs = "[" ++ showItems xs ++ "]"
+  where
+    showItems : Show a => List a -> String
+    showItems [] = ""
+    showItems (x :: []) = show x
+    showItems (x :: next) = show x ++ "," ++ showItems next

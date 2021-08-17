@@ -18,10 +18,16 @@ addToStore (MkData size items) newitem = MkData _ (addToData items)
     addToData [] = [newitem]
     addToData (x :: xs) = x :: addToData xs
 
+search : DataStore -> String -> List String
+search store query = let predicate = isInfixOf query
+                         allItems = toList (items store) in -- can't be bothered to work with dependant pairs
+                     filter predicate allItems
+
 
 data Command = Add String
              | Get Integer
              | Size
+             | Search String
              | Quit
 
 parseCommand : (cmd : String) -> (args : String) -> Maybe Command
@@ -31,6 +37,7 @@ parseCommand "get" val = case all isDigit (unpack val) of
                                False => Nothing
 parseCommand "quit" args = Just Quit
 parseCommand "size" args = Just Size
+parseCommand "search" args = Just (Search args)
 parseCommand _ _ = Nothing
 
 parse : (input : String) -> Maybe Command
@@ -52,6 +59,9 @@ processInput store inp = case parse inp of
                                   Just ("ID " ++ show (size store) ++ "\n", addToStore store item)
                               Just (Get pos) => getEntry pos store
                               Just Size => Just ("Size: " ++ show (size store) ++ "\n", store)
+                              Just (Search query) => case (search store query) of
+                                                        [] => Just ("Item Not Found\n", store)
+                                                        items => Just (show items ++ "\n", store)
                               Just Quit => Nothing
 
 
